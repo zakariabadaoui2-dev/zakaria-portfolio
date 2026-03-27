@@ -187,40 +187,34 @@
       background: rgba(56, 189, 248, 0.12);
     }
 
-    .lang-switcher {
+    .controls {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
     }
 
-    .theme-switcher {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .lang-button,
-    .theme-button {
-      padding: 0.65rem 1rem;
-      border-radius: 999px;
-      border: 1px solid var(--panel-border);
+    .select-control {
+      min-width: 130px;
       background: var(--panel-bg);
       color: var(--text);
-      cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-      font-size: 0.85rem;
+      border: 1px solid var(--panel-border);
+      border-radius: 999px;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
       font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       backdrop-filter: blur(18px);
     }
 
-    .lang-button.active,
-    .lang-button:hover,
-    .theme-button.active,
-    .theme-button:hover {
-      background: var(--accent);
-      color: #0f172a;
-      border-color: transparent;
-      transform: translateY(-1px);
+    .select-control:hover,
+    .select-control:focus {
+      border-color: var(--accent);
     }
 
     .hero {
@@ -584,22 +578,16 @@
         border-radius: 24px;
       }
 
-      .lang-switcher,
-      .theme-switcher {
+      .controls {
         width: 100%;
         justify-content: center;
       }
 
-      .lang-switcher {
+      .controls {
         order: 1;
       }
 
-      .theme-switcher {
-        order: 2;
-      }
-
-      .lang-button,
-      .theme-button {
+      .select-control {
         flex: 1 1 calc(50% - 0.5rem);
         min-width: 120px;
       }
@@ -681,16 +669,18 @@
       <a href="#skills" data-i18n="navSkills">Skills</a>
       <a href="#contact" data-i18n="navContact">Contact</a>
     </nav>
-    <div class="lang-switcher">
-      <button class="lang-button active" data-lang="en">EN</button>
-      <button class="lang-button" data-lang="fr">FR</button>
-      <button class="lang-button" data-lang="ar">AR</button>
-    </div>
-    <div class="theme-switcher">
-      <button class="theme-button active" data-theme="creative">Creative</button>
-      <button class="theme-button" data-theme="mobile">Mobile</button>
-      <button class="theme-button" data-theme="minimal">Minimal</button>
-      <button class="theme-button" data-theme="pro">Dark Pro</button>
+    <div class="controls">
+      <select class="select-control lang-select" aria-label="Select language">
+        <option value="en" selected>EN</option>
+        <option value="fr">FR</option>
+        <option value="ar">AR</option>
+      </select>
+      <select class="select-control theme-select" aria-label="Select theme">
+        <option value="creative" selected>Creative</option>
+        <option value="mobile">Mobile</option>
+        <option value="minimal">Minimal</option>
+        <option value="pro">Dark Pro</option>
+      </select>
     </div>
   </header>
 
@@ -1094,10 +1084,8 @@
 
     function setLanguage(lang) {
       const root = document.documentElement;
-      const buttons = document.querySelectorAll('.lang-button');
-      buttons.forEach(button => {
-        button.classList.toggle('active', button.dataset.lang === lang);
-      });
+      const select = document.querySelector('.lang-select');
+      if (select) select.value = lang;
 
       if (lang === 'ar') {
         root.setAttribute('dir', 'rtl');
@@ -1118,21 +1106,14 @@
 
     function setTheme(theme) {
       const body = document.body;
-      const buttons = document.querySelectorAll('.theme-button');
-      buttons.forEach(button => {
-        button.classList.toggle('active', button.dataset.theme === theme);
-      });
+      const select = document.querySelector('.theme-select');
+      if (select) select.value = theme;
       body.classList.remove('theme-minimal', 'theme-pro', 'theme-creative', 'theme-mobile');
       body.classList.add(`theme-${theme}`);
     }
 
-    document.querySelectorAll('.lang-button').forEach(button => {
-      button.addEventListener('click', () => setLanguage(button.dataset.lang));
-    });
-
-    document.querySelectorAll('.theme-button').forEach(button => {
-      button.addEventListener('click', () => setTheme(button.dataset.theme));
-    });
+    document.querySelector('.lang-select').addEventListener('change', event => setLanguage(event.target.value));
+    document.querySelector('.theme-select').addEventListener('change', event => setTheme(event.target.value));
 
     setTheme('creative');
     setLanguage('en');
