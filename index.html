@@ -572,9 +572,9 @@
       <button class="lang-button" data-lang="ar">AR</button>
     </div>
     <div class="theme-switcher">
+      <button class="theme-button active" data-theme="creative">Creative</button>
       <button class="theme-button" data-theme="minimal">Minimal</button>
-      <button class="theme-button active" data-theme="pro">Dark Pro</button>
-      <button class="theme-button" data-theme="creative">Creative</button>
+      <button class="theme-button" data-theme="pro">Dark Pro</button>
     </div>
   </header>
 
@@ -1018,7 +1018,7 @@
       button.addEventListener('click', () => setTheme(button.dataset.theme));
     });
 
-    setTheme('pro');
+    setTheme('creative');
     setLanguage('en');
   </script>
 </body>
